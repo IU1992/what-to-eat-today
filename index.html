@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>What to Eat Today</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>What to Eat Today?</h1>
+        <button onclick="showRecommendation()">Find Out</button>
+        <p id="recommendation"></p>
+    </div>
+    <script>
+        function showRecommendation() {
+            const date = new Date();
+            const day = date.getDate();
+            const dayOfWeek = date.getDay();
+            let recommendation = '';
+
+            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 0)) {
+                recommendation = '淮南牛肉汤';
+            } else if (day % 2 === 0 && countOccurrences('化隆牛肉面') < 1) {
+                recommendation = '化隆牛肉面';
+            } else if (countOccurrences('同香斋面馆') < 1) {
+                recommendation = '同香斋面馆';
+            } else if (countOccurrences('沙洲炒菜') < 1) {
+                recommendation = '沙洲炒菜';
+            } else {
+                recommendation = '今天随便吃点什么吧！';
+            }
+
+            document.getElementById('recommendation').innerText = `今天是 ${date.toLocaleDateString()}，建议吃 ${recommendation}`;
+        }
+
+        function countOccurrences(restaurant) {
+            const storage = localStorage.getItem('restaurants');
+            const occurrences = storage ? JSON.parse(storage) : {};
+            return occurrences[restaurant] || 0;
+        }
+
+        function updateOccurrences(restaurant) {
+            const storage = localStorage.getItem('restaurants');
+            const occurrences = storage ? JSON.parse(storage) : {};
+            occurrences[restaurant] = (occurrences[restaurant] || 0) + 1;
+            localStorage.setItem('restaurants', JSON.stringify(occurrences));
+        }
+
+        document.querySelector('button').addEventListener('click', () => {
+            const date = new Date();
+            const day = date.getDate();
+            const dayOfWeek = date.getDay();
+            let recommendation = '';
+
+            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 0)) {
+                recommendation = '淮南牛肉汤';
+            } else if (day % 2 === 0 && countOccurrences('化隆牛肉面') < 1) {
+                recommendation = '化隆牛肉面';
+            } else if (countOccurrences('同香斋面馆') < 1) {
+                recommendation = '同香斋面馆';
+            } else if (countOccurrences('沙洲炒菜') < 1) {
+                recommendation = '沙洲炒菜';
+            } else {
+                recommendation = '今天随便吃点什么吧！';
+            }
+
+            updateOccurrences(recommendation);
+            document.getElementById('recommendation').innerText = `今天是 ${date.toLocaleDateString()}，建议吃 ${recommendation}`;
+        });
+    </script>
+</body>
+</html>
