@@ -25,20 +25,24 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            padding: 15px 30px;
+            font-size: 24px;
             margin-top: 20px;
             cursor: pointer;
             border: none;
             background-color: #007bff;
             color: #fff;
-            border-radius: 5px;
+            border-radius: 8px;
         }
         button:hover {
             background-color: #0056b3;
         }
         .icon {
-            font-size: 50px;
+            font-size: 80px;
+            margin-top: 20px;
+        }
+        .recommendation-text {
+            font-size: 28px;
             margin-top: 20px;
         }
     </style>
@@ -47,19 +51,19 @@
     <div class="container">
         <h1>What to Eat Today?</h1>
         <button onclick="showRecommendation()">Find Out</button>
-        <p id="recommendation"></p>
+        <p class="recommendation-text" id="recommendation"></p>
         <i id="icon" class="icon"></i>
     </div>
     <script>
         function showRecommendation() {
             const date = new Date();
             const day = date.getDate();
-            const dayOfWeek = date.getDay();
+            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
             let recommendation = '';
             let iconClass = '';
             let backgroundImage = '';
 
-            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 0)) {
+            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 'Sunday')) {
                 recommendation = '淮南牛肉汤';
                 iconClass = 'fas fa-bowl-rice';
                 backgroundImage = 'url(https://source.unsplash.com/featured/?soup)';
@@ -82,7 +86,7 @@
             }
 
             document.body.style.backgroundImage = backgroundImage;
-            document.getElementById('recommendation').innerText = `今天是 ${date.toLocaleDateString()}，建议吃 ${recommendation}`;
+            document.getElementById('recommendation').innerHTML = `今天是 ${date.toLocaleDateString()}，${dayOfWeek}，建议吃 <strong>${recommendation}</strong>`;
             document.getElementById('icon').className = `icon ${iconClass}`;
         }
 
@@ -102,12 +106,12 @@
         document.querySelector('button').addEventListener('click', () => {
             const date = new Date();
             const day = date.getDate();
-            const dayOfWeek = date.getDay();
+            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
             let recommendation = '';
             let iconClass = '';
             let backgroundImage = '';
 
-            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 0)) {
+            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 'Sunday')) {
                 recommendation = '淮南牛肉汤';
                 iconClass = 'fas fa-bowl-rice';
                 backgroundImage = 'url(https://source.unsplash.com/featured/?soup)';
@@ -131,7 +135,7 @@
 
             updateOccurrences(recommendation);
             document.body.style.backgroundImage = backgroundImage;
-            document.getElementById('recommendation').innerText = `今天是 ${date.toLocaleDateString()}，建议吃 ${recommendation}`;
+            document.getElementById('recommendation').innerHTML = `今天是 ${date.toLocaleDateString()}，${dayOfWeek}，建议吃 <strong>${recommendation}</strong>`;
             document.getElementById('icon').className = `icon ${iconClass}`;
         });
     </script>
