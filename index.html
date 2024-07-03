@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>What to Eat Today</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" integrity="sha512-Fo3rlrQkTyEX7Y9pqXf58sJpFsn9Gz5UZ7xF8N6Vjix0+RkKSO7atN5ZqX5CUpvoBtb94nP0zHJ3e9rYpYRXAg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,13 +12,11 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-size: cover;
-            background-position: center;
-            transition: background-image 0.5s ease-in-out;
+            background-color: #f0f0f0;
         }
         .container {
             text-align: center;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: #fff;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -37,10 +34,6 @@
         button:hover {
             background-color: #0056b3;
         }
-        .icon {
-            font-size: 80px;
-            margin-top: 20px;
-        }
         .recommendation-text {
             font-size: 28px;
             margin-top: 20px;
@@ -52,7 +45,6 @@
         <h1>What to Eat Today?</h1>
         <button onclick="showRecommendation()">Find Out</button>
         <p class="recommendation-text" id="recommendation"></p>
-        <i id="icon" class="icon"></i>
     </div>
     <script>
         function showRecommendation() {
@@ -60,84 +52,17 @@
             const day = date.getDate();
             const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
             let recommendation = '';
-            let iconClass = '';
-            let backgroundImage = '';
 
-            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 'Sunday')) {
+            if (day % 2 !== 0 && (dayOfWeek !== 'Sunday')) {
                 recommendation = '淮南牛肉汤';
-                iconClass = 'fas fa-bowl-rice';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?soup)';
-            } else if (day % 2 === 0 && countOccurrences('化隆牛肉面') < 1) {
+            } else if (day % 2 === 0) {
                 recommendation = '化隆牛肉面';
-                iconClass = 'fas fa-utensils';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?noodles)';
-            } else if (countOccurrences('同香斋面馆') < 1) {
-                recommendation = '同香斋面馆';
-                iconClass = 'fas fa-hamburger';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?noodle-soup)';
-            } else if (countOccurrences('沙洲炒菜') < 1) {
-                recommendation = '沙洲炒菜';
-                iconClass = 'fas fa-concierge-bell';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?stir-fry)';
             } else {
-                recommendation = '今天随便吃点什么吧！';
-                iconClass = 'fas fa-pizza-slice';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?food)';
+                recommendation = '同香斋面馆';
             }
 
-            document.body.style.backgroundImage = backgroundImage;
             document.getElementById('recommendation').innerHTML = `今天是 ${date.toLocaleDateString()}，${dayOfWeek}，建议吃 <strong>${recommendation}</strong>`;
-            document.getElementById('icon').className = `icon ${iconClass}`;
         }
-
-        function countOccurrences(restaurant) {
-            const storage = localStorage.getItem('restaurants');
-            const occurrences = storage ? JSON.parse(storage) : {};
-            return occurrences[restaurant] || 0;
-        }
-
-        function updateOccurrences(restaurant) {
-            const storage = localStorage.getItem('restaurants');
-            const occurrences = storage ? JSON.parse(storage) : {};
-            occurrences[restaurant] = (occurrences[restaurant] || 0) + 1;
-            localStorage.setItem('restaurants', JSON.stringify(occurrences));
-        }
-
-        document.querySelector('button').addEventListener('click', () => {
-            const date = new Date();
-            const day = date.getDate();
-            const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' });
-            let recommendation = '';
-            let iconClass = '';
-            let backgroundImage = '';
-
-            if (day % 2 !== 0 && (countOccurrences('淮南牛肉汤') < 2 || dayOfWeek === 'Sunday')) {
-                recommendation = '淮南牛肉汤';
-                iconClass = 'fas fa-bowl-rice';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?soup)';
-            } else if (day % 2 === 0 && countOccurrences('化隆牛肉面') < 1) {
-                recommendation = '化隆牛肉面';
-                iconClass = 'fas fa-utensils';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?noodles)';
-            } else if (countOccurrences('同香斋面馆') < 1) {
-                recommendation = '同香斋面馆';
-                iconClass = 'fas fa-hamburger';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?noodle-soup)';
-            } else if (countOccurrences('沙洲炒菜') < 1) {
-                recommendation = '沙洲炒菜';
-                iconClass = 'fas fa-concierge-bell';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?stir-fry)';
-            } else {
-                recommendation = '今天随便吃点什么吧！';
-                iconClass = 'fas fa-pizza-slice';
-                backgroundImage = 'url(https://source.unsplash.com/featured/?food)';
-            }
-
-            updateOccurrences(recommendation);
-            document.body.style.backgroundImage = backgroundImage;
-            document.getElementById('recommendation').innerHTML = `今天是 ${date.toLocaleDateString()}，${dayOfWeek}，建议吃 <strong>${recommendation}</strong>`;
-            document.getElementById('icon').className = `icon ${iconClass}`;
-        });
     </script>
 </body>
 </html>
